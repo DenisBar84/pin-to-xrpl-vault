@@ -19,20 +19,20 @@ const FileUpload = () => {
   };
 
   return (
-    <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+    <Card className="bg-black/80 border-green-400/30 backdrop-blur-sm shadow-lg shadow-green-400/10">
       <CardHeader>
-        <CardTitle className="text-white flex items-center">
+        <CardTitle className="text-green-400 flex items-center font-mono">
           <Upload className="w-5 h-5 mr-2" />
-          Pin New File
+          &gt; PIN_NEW_FILE.EXE
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div className="border-2 border-dashed border-white/20 rounded-lg p-8 text-center hover:border-purple-500/50 transition-colors cursor-pointer">
-              <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-white mb-2">Drop files here or click to browse</p>
-              <p className="text-gray-400 text-sm">Max file size: 100MB</p>
+            <div className="border-2 border-dashed border-cyan-400/40 rounded p-8 text-center hover:border-pink-400/60 transition-colors cursor-pointer bg-gradient-to-br from-cyan-400/5 to-pink-400/5">
+              <Upload className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
+              <p className="text-cyan-300 mb-2 font-mono">DROP FILES HERE OR CLICK TO BROWSE</p>
+              <p className="text-cyan-400 text-sm font-mono">[MAX_FILE_SIZE: 100MB]</p>
               <Input
                 type="file"
                 className="hidden"
@@ -41,12 +41,12 @@ const FileUpload = () => {
             </div>
             
             {selectedFile && (
-              <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg">
-                <FileText className="w-5 h-5 text-blue-400" />
+              <div className="flex items-center space-x-3 p-3 bg-black/60 rounded border border-green-400/30">
+                <FileText className="w-5 h-5 text-pink-400" />
                 <div className="flex-1">
-                  <div className="text-white text-sm font-medium">{selectedFile.name}</div>
-                  <div className="text-gray-400 text-xs">
-                    {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
+                  <div className="text-green-400 text-sm font-mono">{selectedFile.name}</div>
+                  <div className="text-cyan-300 text-xs font-mono">
+                    [{(selectedFile.size / (1024 * 1024)).toFixed(2)} MB]
                   </div>
                 </div>
               </div>
@@ -55,38 +55,38 @@ const FileUpload = () => {
 
           <div className="space-y-4">
             <div>
-              <Label className="text-white">Pin Duration (days)</Label>
+              <Label className="text-cyan-400 font-mono">PIN_DURATION (days):</Label>
               <Input
                 type="number"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
                 min="30"
                 max="365"
-                className="bg-white/10 border-white/20 text-white"
+                className="bg-black/60 border-cyan-400/40 text-green-400 font-mono focus:border-pink-400/60"
               />
             </div>
 
-            <Card className="bg-white/5 border-white/10">
+            <Card className="bg-black/60 border-pink-400/30 shadow-lg shadow-pink-400/10">
               <CardHeader className="pb-3">
-                <CardTitle className="text-white text-lg flex items-center">
+                <CardTitle className="text-pink-400 text-lg flex items-center font-mono">
                   <Calculator className="w-4 h-4 mr-2" />
-                  Cost Estimate
+                  &gt; COST_ESTIMATE.LOG
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Storage Cost</span>
-                    <span className="text-white">{selectedFile ? ((selectedFile.size / (1024 * 1024 * 1024)) * 2.5 * duration / 30).toFixed(2) : '0.00'} PINN</span>
+                  <div className="flex justify-between text-sm font-mono">
+                    <span className="text-cyan-300">Storage Cost:</span>
+                    <span className="text-green-400">{selectedFile ? ((selectedFile.size / (1024 * 1024 * 1024)) * 2.5 * duration / 30).toFixed(2) : '0.00'} PINN</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Network Fee</span>
-                    <span className="text-white">0.10 PINN</span>
+                  <div className="flex justify-between text-sm font-mono">
+                    <span className="text-cyan-300">Network Fee:</span>
+                    <span className="text-green-400">0.10 PINN</span>
                   </div>
-                  <div className="border-t border-white/10 pt-2">
-                    <div className="flex justify-between font-medium">
-                      <span className="text-white">Total</span>
-                      <span className="text-purple-400">{calculateCost()} PINN</span>
+                  <div className="border-t border-pink-400/30 pt-2">
+                    <div className="flex justify-between font-mono">
+                      <span className="text-cyan-300">Total:</span>
+                      <span className="text-yellow-400">{calculateCost()} PINN</span>
                     </div>
                   </div>
                 </div>
@@ -94,10 +94,10 @@ const FileUpload = () => {
             </Card>
 
             <Button 
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              className="w-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-600 hover:to-cyan-600 border border-green-400 shadow-lg shadow-green-500/25 font-mono"
               disabled={!selectedFile}
             >
-              Pin to IPFS
+              PIN_TO_IPFS.EXE
             </Button>
           </div>
         </div>

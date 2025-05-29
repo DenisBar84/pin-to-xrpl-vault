@@ -6,15 +6,29 @@ import TokenBalance from "@/components/TokenBalance";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Retro grid background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}></div>
+      </div>
+      
       <Header />
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 relative z-10">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-cyan-400 to-pink-500 mb-4 font-mono tracking-wider">
             XRPin
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Decentralized Storage on XRPL EVM Sidechain - Pin your files to IPFS with blockchain-powered reliability
+          <div className="text-green-400 text-lg font-mono border border-green-400 inline-block px-4 py-2 bg-black/80 backdrop-blur-sm">
+            &gt; DECENTRALIZED_STORAGE.EXE INITIALIZED
+          </div>
+          <p className="text-cyan-300 max-w-2xl mx-auto mt-4 font-mono text-sm">
+            [XRPL EVM SIDECHAIN] Pin your files to IPFS with blockchain-powered reliability
           </p>
         </div>
         
