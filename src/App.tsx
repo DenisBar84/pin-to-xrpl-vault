@@ -16,7 +16,7 @@ const App = () => (
       <FileProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.MODE === 'production' ? '/pin-to-xrpl-vault' : '/'}>
           <Routes>
             <Route path="/" element={<Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
