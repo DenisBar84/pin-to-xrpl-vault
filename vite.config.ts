@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  base: "/pin-to-xrpl-vault/",
+  base: mode === 'production' ? "/pin-to-xrpl-vault/" : "/",
   plugins: [
     react(),
     mode === 'development' &&
