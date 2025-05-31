@@ -4,18 +4,73 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Upload, FileText, Calculator } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useFiles } from "@/contexts/FileContext";
+import { useToast } from "@/hooks/use-toast";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [duration, setDuration] = useState(30);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { addFile } = useFiles();
+  const { toast } = useToast();
 
   const calculateCost = () => {
     if (!selectedFile) return 0;
     const sizeInGB = selectedFile.size / (1024 * 1024 * 1024);
-    const monthlyCost = sizeInGB * 2.5; // 2.5 PINN per GB
-    const totalCost = (monthlyCost * duration) / 30 + 0.1; // Network fee
+    const monthlyCost = sizeInGB * 2.5;
+    const totalCost = (monthlyCost * duration) / 30 + 0.1;
     return totalCost.toFixed(2);
+  };
+
+  const handleFileSelect = (file: File) => {
+    if (file.size > 100 * 1024 * 1024) { // 100MB limit
+      toast({
+        title: "File too large",
+        description: "Maximum file size is 100MB",
+        variant: "destructive"
+      });
+      return;
+    }
+    setSelectedFile(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      handleFileSelect(files[0]);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+    
+    setIsUploading(true);
+    try {
+      await addFile(selectedFile, duration);
+      toast({
+        title: "File pinned successfully!",
+        description: `${selectedFile.name} has been pinned to IPFS`,
+      });
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "There was an error pinning your file",
+        variant: "destructive"
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -29,14 +84,23 @@ const FileUpload = () => {
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div className="border-2 border-dashed border-cyan-400/40 rounded p-8 text-center hover:border-pink-400/60 transition-colors cursor-pointer bg-gradient-to-br from-cyan-400/5 to-pink-400/5">
+            <div 
+              className="border-2 border-dashed border-cyan-400/40 rounded p-8 text-center hover:border-pink-400/60 transition-colors cursor-pointer bg-gradient-to-br from-cyan-400/5 to-pink-400/5"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onClick={() => fileInputRef.current?.click()}
+            >
               <Upload className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
               <p className="text-cyan-300 mb-2 font-mono">DROP FILES HERE OR CLICK TO BROWSE</p>
               <p className="text-cyan-400 text-sm font-mono">[MAX_FILE_SIZE: 100MB]</p>
               <Input
+                ref={fileInputRef}
                 type="file"
                 className="hidden"
-                onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleFileSelect(file);
+                }}
               />
             </div>
             
@@ -95,9 +159,10 @@ const FileUpload = () => {
 
             <Button 
               className="w-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-600 hover:to-cyan-600 border border-green-400 shadow-lg shadow-green-500/25 font-mono"
-              disabled={!selectedFile}
+              disabled={!selectedFile || isUploading}
+              onClick={handleUpload}
             >
-              PIN_TO_IPFS.EXE
+              {isUploading ? 'PINNING...' : 'PIN_TO_IPFS.EXE'}
             </Button>
           </div>
         </div>
